@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英文單字測驗</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 500px; margin: auto; background-color: #f9f9f9; }
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { font-size: 18px; color: #333; }
+        .btn { display: block; width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; background: #fff; border-radius: 5px; font-size: 16px; text-align: left; cursor: pointer; }
+        .btn:hover { background-color: #eef; }
+        #result { font-weight: bold; margin-top: 15px; font-size: 18px; }
+        .next-btn { background: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2 id="question">題目載入中...</h2>
+    <div id="options"></div>
+    <div id="result"></div>
+    <button id="nextBtn" class="next-btn" onclick="nextQuestion()">下一題</button>
+</div>
+
+<script>
+    const questions = [
+        { q: "The king wore a golden _____ on his head.", opts: ["cradle", "crown", "crutch", "couch"], ans: 1 },
+        { q: "Asia is the largest _____ in the world.", opts: ["continent", "creature", "crew", "criminal"], ans: 0 },
+        { q: "Sitting on the sofa feels very _____.", opts: ["crispy", "cozy", "cruelty", "countable"], ans: 1 },
+        { q: "The baby fell asleep peacefully in her _____.", opts: ["cricket", "contract", "cradle", "crash"], ans: 2 },
+        { q: "The company will hire a highly _____ designer.", opts: ["creative", "coward", "cultural", "crunchy"], ans: 0 }
+    ];
+
+    let current = 0;
+
+    function loadQuestion() {
+        document.getElementById('result').innerText = '';
+        document.getElementById('nextBtn').style.display = 'none';
+        let q = questions[current];
+        document.getElementById('question').innerText = (current + 1) + ". " + q.q;
+        let optDiv = document.getElementById('options');
+        optDiv.innerHTML = '';
+        q.opts.forEach((opt, idx) => {
+            let btn = document.createElement('button');
+            btn.className = 'btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkAns(idx);
+            optDiv.appendChild(btn);
+        });
+    }
+
+    function checkAns(selected) {
+        let q = questions[current];
+        let res = document.getElementById('result');
+        if (selected === q.ans) {
+            res.innerText = "⭕ 正確！";
+            res.style.color = "green";
+        } else {
+            res.innerText = "❌ 錯誤！正確答案是: " + q.opts[q.ans];
+            res.style.color = "red";
+        }
+        document.getElementById('nextBtn').style.display = 'block';
+    }
+
+    function nextQuestion() {
+        current = (current + 1) % questions.length;
+        loadQuestion();
+    }
+
+    loadQuestion();
+</script>
+
+</body>
+</html>
